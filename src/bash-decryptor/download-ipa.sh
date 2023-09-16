@@ -47,7 +47,7 @@ decrypt_app() {
     return 0
   fi
 
-  echo "$decrypt_output"
+  #echo "$decrypt_output"
   return 1
 }
 
