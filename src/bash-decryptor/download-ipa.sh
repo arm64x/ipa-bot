@@ -138,6 +138,7 @@ main() {
   bundleId=$(echo "$appInfoResponse" | jq -r '.bundleId')
   fileSizeBytes=$(echo "$appInfoResponse" | jq -r '.fileSizeBytes')
   version=$(echo "$appInfoResponse" | jq -r '.version')
+  currentVersionReleaseDate=$(echo "$appInfoResponse" | jq -r '.currentVersionReleaseDate')
 
   echo "🔍 Bundle ID: $bundleId"
 
@@ -150,6 +151,22 @@ main() {
     if [[ "$hasLicense" = *"license is required"* ]]; then
       echo "❌ License is required for this paid app. Either pay for the app or find the IPA file here: https://iphonecake.com/app_${trackId}_.html"
       exit 1
+    fi
+  fi
+
+  # Check Apple Arcade & Pre-Order
+  if [ "$price" = "null" ]; then
+    currentDate=$(date +"%Y-%m-%d")
+    # Compare today's date with currentVersionReleaseDate
+    if [[ "$currentDate" < "$currentVersionReleaseDate" ]]; then
+          echo "❌ Unreleased app."
+          exit 1
+    else
+      if [ "$ARCADE" = "0" ]; then
+        echo "❌ Apple Arcade is not supported."
+        exit 1
+      else
+        echo "✅ Apple Arcade"
     fi
   fi
 
