@@ -167,6 +167,7 @@ main() {
         exit 1
       else
         echo "✅ Apple Arcade"
+      fi
     fi
   fi
 
